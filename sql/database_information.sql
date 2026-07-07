@@ -1,0 +1,28 @@
+PROMPT ===== Database Information =====
+
+SELECT NAME,
+       DB_UNIQUE_NAME,
+       OPEN_MODE,
+       DATABASE_ROLE,
+       LOG_MODE
+FROM V$DATABASE;
+
+PROMPT ===== Instance =====
+
+SELECT INSTANCE_NAME,
+       HOST_NAME,
+       VERSION,
+       STATUS
+FROM V$INSTANCE;
+
+PROMPT ===== Tablespaces =====
+
+SELECT TABLESPACE_NAME,
+       STATUS,
+       CONTENTS
+FROM DBA_TABLESPACES
+ORDER BY TABLESPACE_NAME;
+
+PROMPT ===== Archive Log Mode =====
+
+ARCHIVE LOG LIST;
