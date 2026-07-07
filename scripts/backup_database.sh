@@ -1,0 +1,37 @@
+#!/bin/bash
+
+ORACLE_SID=ORCL
+ORACLE_HOME=/u01/app/oracle/product/19.0.0/dbhome_1
+BACKUP_DIR=/backup/rman
+LOG_DIR=/backup/logs
+
+export ORACLE_SID
+export ORACLE_HOME
+export PATH=$ORACLE_HOME/bin:$PATH
+
+DATE=$(date +%Y%m%d)
+
+mkdir -p "$BACKUP_DIR"
+mkdir -p "$LOG_DIR"
+
+rman target / log="$LOG_DIR/full_${DATE}.log" <<EOF
+
+RUN {
+
+BACKUP AS COMPRESSED BACKUPSET DATABASE;
+
+BACKUP CURRENT CONTROLFILE;
+
+BACKUP SPFILE;
+
+SQL 'ALTER SYSTEM ARCHIVE LOG CURRENT';
+
+BACKUP ARCHIVELOG ALL DELETE INPUT;
+
+DELETE NOPROMPT OBSOLETE;
+
+}
+
+EXIT;
+
+EOF
